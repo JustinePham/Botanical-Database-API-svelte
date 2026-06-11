@@ -1,9 +1,7 @@
 <script lang="ts">
     import { searchPlants } from '$lib/apis/trefle';
-    import CropDetails from '$lib/components/+CropDetails.svelte';
-    import CropList from '$lib/components/+CropList.svelte';
     import SearchField from '$lib/components/+SearchField.svelte';
-    import { crops, type Crop } from '$lib/types/crops';
+    import { type Crop } from '$lib/types/crops';
     import type { Plant } from '$lib/types/plants';
 
     // State for selected crop and search results
