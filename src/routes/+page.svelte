@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { searchPlants } from '$lib/apis/trefle';
+    import { searchPlants, getPlantDetails } from '$lib/apis/trefle';
     import SearchField from '$lib/components/+SearchField.svelte';
     import { type Crop } from '$lib/types/crops';
     import type { Plant } from '$lib/types/plants';
@@ -22,6 +22,18 @@
         searchResults = await searchPlants(query);
         console.log('Search results:', searchResults);
     };
+    const handleSelected = async (id: string | number) => {
+        console.log('Selected plant:', id);
+        // Fetch additional details if needed
+        try {
+            const details = await getPlantDetails(id as string);
+            console.log('Plant details:', details);
+            // You can update selectedCrop or any other state here
+        } catch (error) {
+            console.error('Error fetching plant details:', error);
+        }
+        
+    };
 </script>
 
 <!-- <CropList {crops} {onSelect} /> -->
@@ -31,7 +43,9 @@
     <h2>Search Results</h2>
     <ul>
         {#each searchResults as plant}
-            <li>{plant.common_name ?? plant.scientific_name ?? 'Unknown plant'}</li>
+            <li onclick={() => handleSelected(plant.slug)}>
+                {plant.common_name ?? plant.scientific_name ?? 'Unknown plant'}
+            </li>
         {/each}
     </ul>
 {/if}

@@ -48,3 +48,24 @@ export async function searchPlants(urlOrQuery: string = '', filters?: FilterPara
     console.log('Fetched plants:', data?.data ?? data);
     return data?.data ?? data;
 }
+
+
+export async function getPlantDetails(plantId: string): Promise<any> {
+    if (!plantId) throw new Error('Plant ID is required');
+    let url = '';
+    if (browser) {
+        // Client code: route through our server endpoint to avoid CORS
+        url = `/api/plants/${encodeURIComponent(plantId)}`;
+    } else {
+        // Server code: call Trefle directly
+        url = `${TREFLE_API_BASE_URL}/plants/${plantId}?token=${publicEnv.PUBLIC_TREFLE_API_TOKEN}`;
+    }
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`Error fetching plant details: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('Fetched plant details:', data);
+    return data;
+}
